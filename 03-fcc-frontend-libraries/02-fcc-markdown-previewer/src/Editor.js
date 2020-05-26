@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import placeholder from "./placeholder";
+
 import "./Editor.css";
 
 class Editor extends Component {
@@ -10,11 +12,13 @@ class Editor extends Component {
     this.props.parseMarkdown(e.target.value);
   }
   render() {
-    const { input, placeholder } = this.props;
+    const { input } = this.props;
     return (
-      <textarea id="editor" value={input} onChange={this.handleInput}>
-        {placeholder}
-      </textarea>
+      <textarea
+        id="editor"
+        value={input}
+        onChange={this.handleInput}
+      ></textarea>
     );
   }
 }

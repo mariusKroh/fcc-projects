@@ -3,6 +3,7 @@ import marked from "marked";
 import placeholder from "./placeholder";
 import Editor from "./Editor";
 import Preview from "./Preview";
+import "./MarkdownPreviewer.css";
 
 class MarkdownPreviewer extends Component {
   constructor(props) {
@@ -40,7 +41,7 @@ class MarkdownPreviewer extends Component {
     return (
       <div className="Markdown-Previewer">
         <Editor
-          value={input}
+          input={input}
           parseMarkdown={this.parseMarkdown}
           placeholder={placeholder}
         />
