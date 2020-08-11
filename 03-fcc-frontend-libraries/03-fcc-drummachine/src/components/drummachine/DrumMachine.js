@@ -9,6 +9,8 @@ const DrumMachine = (props) => {
   // get styles
   const classes = useStyles();
   const { root, padsContainer } = classes;
+  // display state
+  const [display, setDisplay] = useState("");
   // add listeners once onload
   useEffect(() => {
     document.addEventListener("keydown", handleKeydown);
@@ -44,11 +46,20 @@ const DrumMachine = (props) => {
   };
 
   const playSound = (element) => {
+    // reset and play
     element.currentTime = 0;
     element.play();
+    // get name and update display
+    const name = PRESETS[0].sounds.filter((sound) => {
+      return sound.trigger === element.id;
+    });
+    const displayText = name[0].name;
+    updateDisplay(displayText);
   };
 
-  const updateDisplay = (string) => {};
+  const updateDisplay = (string) => {
+    setDisplay(string);
+  };
 
   const makePads = PRESETS[0].sounds.map((sound) => (
     <DrumPad
@@ -56,13 +67,12 @@ const DrumMachine = (props) => {
       id={sound.name}
       source={sound.source}
       trigger={sound.trigger}
-      keyCode={sound.keyCode}
     />
   ));
 
   return (
     <div className={root} id="drum-machine">
-      <Display />
+      <Display text={display} />
       <div className={padsContainer}>{makePads}</div>
     </div>
   );
