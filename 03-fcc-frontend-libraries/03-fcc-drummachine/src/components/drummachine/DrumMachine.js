@@ -11,7 +11,15 @@ import useStyles from "./DrumMachineStyles.js";
 const DrumMachine = () => {
   // get styles
   const classes = useStyles();
-  const { root, padsContainer } = classes;
+  const {
+    root,
+    machine,
+    model808,
+    model909,
+    title,
+    model,
+    padsContainer,
+  } = classes;
   // display state
   const [display, setDisplay] = useState("");
   // add listeners once onload
@@ -71,16 +79,26 @@ const DrumMachine = () => {
     <DrumPad
       key={sound.id}
       id={sound.name}
+      name={sound.name}
       source={sound.source}
       trigger={sound.trigger}
     />
   ));
 
   return (
-    <div className={root} id="drum-machine">
-      <Display text={display} />
-      <Switch className="Switch Model" onChange={toggle808} />
-      <div className={padsContainer}>{makePads}</div>
+    <div className={`${root} ${is808 ? model808 : model909}`}>
+      <div id="drum-machine" className={machine}>
+        <div className={title}>
+          <p>REACT</p>
+          <Switch className="Switch Model" onChange={toggle808} />
+        </div>
+        <div className={model}>
+          <p> {is808 ? "TR-808" : "TR-909"}</p>
+          <p>SAMPLE PLAYER</p>
+        </div>
+        <Display text={display} />
+        <div className={padsContainer}>{makePads}</div>
+      </div>
     </div>
   );
 };
