@@ -10,7 +10,7 @@ const colors = {
     background: "#c9ccd3",
     primary: "#3d4350",
     secondary: "#f47900",
-    darkblue: "#3e4c66",
+    darkblue: "#4f5d66",
     grey: "#8d8885",
   },
 };
