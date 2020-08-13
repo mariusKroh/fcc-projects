@@ -1,5 +1,6 @@
 import React, { useState, useContext } from "react";
 import { useEffect } from "react";
+import useDisplayState from "../../hooks/useDisplayState";
 import { ModelContext } from "../../context/ModelContext";
 import { TR808, TR909 } from "../../Presets";
 import Display from "../display/Display";
@@ -20,8 +21,8 @@ const DrumMachine = () => {
     model,
     padsContainer,
   } = classes;
-  // display state
-  const [display, setDisplay] = useState("");
+  // init the display state hook
+  const { display, updateDisplay, playing } = useDisplayState("");
   // add listeners once onload
   useEffect(() => {
     document.addEventListener("keydown", handleKeydown);
@@ -71,10 +72,6 @@ const DrumMachine = () => {
     updateDisplay(displayText);
   };
 
-  const updateDisplay = (string) => {
-    setDisplay(string);
-  };
-
   const makePads = preset[0].sounds.map((sound) => (
     <DrumPad
       key={sound.id}
@@ -96,7 +93,7 @@ const DrumMachine = () => {
           <p> {is808 ? "TR-808" : "TR-909"}</p>
           <p>SAMPLE PLAYER</p>
         </div>
-        <Display text={display} />
+        <Display text={display} isPlaying={playing} />
         <div className={padsContainer}>{makePads}</div>
       </div>
     </div>
