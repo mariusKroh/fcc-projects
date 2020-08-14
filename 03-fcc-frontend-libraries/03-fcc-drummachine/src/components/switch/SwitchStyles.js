@@ -9,6 +9,8 @@ const useStyles = createUseStyles({
     display: "inline-block",
     width: "2.8rem",
     height: "1.5rem",
+    cursor: "pointer",
+    zIndex: "200",
     "& input": {
       opacity: "0",
       width: "0",

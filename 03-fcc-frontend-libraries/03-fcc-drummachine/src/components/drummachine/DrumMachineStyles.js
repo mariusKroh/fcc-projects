@@ -14,6 +14,7 @@ const useStyles = createUseStyles({
     justifyContent: "center",
     alignItems: "center",
     fontFamily: "Audiowide",
+    userSelect: "none",
   },
   machine: {
     width: "1200px",
@@ -28,6 +29,7 @@ const useStyles = createUseStyles({
   baseDimensions: {
     width: "95%",
     padding: "0 2.5%",
+    zIndex: "200",
   },
   title: {
     extend: "baseDimensions",
@@ -37,6 +39,7 @@ const useStyles = createUseStyles({
     display: "flex",
     flexDirection: "row",
     textShadow: textShadow,
+
     "& :last-child": {
       marginLeft: "auto",
     },
