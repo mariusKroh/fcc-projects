@@ -1,12 +1,12 @@
 import React, { useState, useContext } from "react";
 import { useEffect } from "react";
-import useDisplayState from "../../hooks/useDisplayState";
 import { ModelContext } from "../../context/ModelContext";
+import useDisplayState from "../../hooks/useDisplayState";
+import usePlayState from "../../hooks/usePlayState";
 import { TR808, TR909 } from "../../Presets";
 import Display from "../display/Display";
 import DrumPad from "../drumpad/DrumPad";
 import Switch from "../switch/Switch";
-
 import useStyles from "./DrumMachineStyles.js";
 
 const DrumMachine = () => {
@@ -21,16 +21,25 @@ const DrumMachine = () => {
     model,
     padsContainer,
   } = classes;
+
   // init the display state hook
+  const [displayText, setDisplayText] = useState("");
   const { display, updateDisplay, playing } = useDisplayState("");
+
+  // init the padsPlayState hook
+  const [padsPlaying, setPlayState, resetPad] = usePlayState();
+
   // add listeners once onload
   useEffect(() => {
     document.addEventListener("keydown", handleKeydown);
     document.addEventListener("click", handleClick);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   // get context and set preset
   const { is808, toggle808 } = useContext(ModelContext);
   let preset = is808 ? TR808 : TR909;
+
   // user presses a key
   const handleKeydown = (e) => {
     // check if key pressed should trigger a sample, if not return
@@ -69,16 +78,25 @@ const DrumMachine = () => {
       return sound.trigger === element.id;
     });
     const displayText = name[0].name;
-    updateDisplay(displayText);
+    changeDisplay(displayText);
+    //updateDisplay(displayText);
+    // set the pads playstate using the elements id
+    setPlayState(element.id);
+    setTimeout(resetPad, 150, element.id);
   };
 
-  const makePads = preset[0].sounds.map((sound) => (
+  const changeDisplay = (string) => {
+    return setDisplayText(string);
+  };
+
+  const makePads = preset[0].sounds.map((sound, i) => (
     <DrumPad
       key={sound.id}
       id={sound.name}
       name={sound.name}
       source={sound.source}
       trigger={sound.trigger}
+      isPlaying={padsPlaying[sound.trigger]}
     />
   ));
 
@@ -93,7 +111,7 @@ const DrumMachine = () => {
           <p> {is808 ? "TR-808" : "TR-909"}</p>
           <p>SAMPLE PLAYER</p>
         </div>
-        <Display text={display} isPlaying={playing} />
+        <Display text={displayText} isPlaying={playing} />
         <div className={padsContainer}>{makePads}</div>
       </div>
     </div>
