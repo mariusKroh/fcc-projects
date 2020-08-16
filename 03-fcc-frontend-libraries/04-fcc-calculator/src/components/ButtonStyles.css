@@ -1,0 +1,17 @@
+.calculator-button {
+    height: 100%;
+    width: 100%;
+    font-size: 24px;
+    display: grid;
+    place-items: center;
+}
+
+.operator {
+    background-color: orange
+}
+
+.number {
+    background-color: lightgrey
+}
+
+.content {}
