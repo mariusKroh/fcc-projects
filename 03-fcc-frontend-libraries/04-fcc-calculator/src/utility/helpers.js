@@ -21,3 +21,7 @@ export const isNegativeValue = (value) => String(value).charAt(0) === "-";
 export const inputLength = (value) => String(value).length;
 
 export const hasInput = (value) => value !== 0 || inputLength(value) > 1;
+
+export const hasDecimal = (value) => {
+  return value % 1 !== 0;
+};
