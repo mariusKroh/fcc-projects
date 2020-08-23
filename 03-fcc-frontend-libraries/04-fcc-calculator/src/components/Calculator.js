@@ -2,9 +2,6 @@ import React, { useState, useEffect } from "react";
 import {
   killLeadingZero,
   evaluateOperator,
-  isNegativeValue,
-  inputLength,
-  hasInput,
   hasDecimal,
 } from "../utility/helpers";
 import Display from "./Display";
@@ -12,233 +9,114 @@ import Button from "./Button";
 import "./CalculatorStyles.css";
 
 const Calculator = () => {
-  const [firstValue, setFirstValue] = useState(0);
-  const [secondValue, setSecondValue] = useState(0);
+  const [currentValue, setCurrentValue] = useState(null);
+  const [memoryValue, setMemoryValue] = useState(0);
+  const [display, setDisplay] = useState(0);
   const [operator, setOperator] = useState(null);
-  const [inputValue, setInputValue] = useState(0);
-  //
-  const [calculatorState, setCalculatorState] = useState({
-    inputFirstValue: true,
-    inputSecondValue: false,
-    inputOperator: false,
-    hasPreviousResult: false,
-  });
-  //
-  const {
-    inputFirstValue,
-    inputSecondValue,
-    inputOperator,
-    hasPreviousResult,
-  } = calculatorState;
-  //
-
-  //
-  useEffect(() => {
-    if (inputFirstValue) {
-      setCalculatorState((state) => {
-        return { ...state, inputSecondValue: false, inputOperator: false };
-      });
-    } else if (inputSecondValue) {
-      setCalculatorState((state) => {
-        return { ...state, inputFirstValue: false, inputOperator: false };
-      });
-    } else if (inputOperator) {
-      setCalculatorState((state) => {
-        return { ...state, inputFirstValue: false, inputSecondValue: false };
-      });
-    }
-  }, [inputFirstValue, inputSecondValue, inputOperator]);
-  //
-  // useEffect(() => {
-  //   if (inputSecondValue && firstValue === 0) {
-  //     //refactor
-  //     console.log("and here");
-  //     return setFirstValue(String(inputValue));
-  //   }
-  // }, [firstValue, inputSecondValue, inputValue]);
 
   useEffect(() => {
-    if (hasPreviousResult) {
-      setOperator(inputValue);
+    if (currentValue !== null && operator === null) {
+      setMemoryValue(currentValue);
+    } else if (currentValue !== null && operator !== null) {
+      setDisplay(currentValue);
     }
-  }, [hasPreviousResult, inputValue]);
+  }, [currentValue, operator]);
 
-  const handleUserInput = (value) => {
-    setInputValue(value);
-    const isOperator = isNaN(value);
-    const isDecimal = value === ".";
-
-    if (isOperator && !isDecimal) {
-      return handleOperatorInput(value);
-    } else if (isDecimal) {
-      return handleDecimalInput(value);
-    } else {
-      return handleNumberInput(value);
-    }
-  };
+  useEffect(() => {
+    setDisplay(memoryValue);
+  }, [memoryValue]);
 
   const handleOperatorInput = (value) => {
-    const isMinus = value === "-";
-    if (inputFirstValue && isMinus && !hasInput(firstValue)) {
-      return setFirstValue(value);
-    } else if (
-      (inputFirstValue &&
-        isNegativeValue(firstValue) &&
-        inputLength(firstValue) > 1) ||
-      (inputFirstValue &&
-        !isNegativeValue(firstValue) &&
-        inputLength(firstValue) > 0)
-    ) {
+    if (currentValue === display && operator !== null) {
       setOperator(value);
-      setCalculatorState({ inputOperator: true });
-      return;
-    } else if (inputOperator) {
-      return setOperator(value);
-    } else if (inputSecondValue) {
-      // we have to switch values for calculation as the actual value of firstValue is stored under the secondValue variable
-      calculate(
-        secondValue,
-        firstValue,
-        evaluateOperator(operator),
-        setSecondValue
-      );
-      handleReset();
-      return;
+      handleEquals();
     } else {
-      return;
+      setDisplay(0);
+      setCurrentValue(null);
+      setOperator(value);
     }
-    // }
   };
 
   const handleNumberInput = (value) => {
-    if (inputFirstValue && !hasPreviousResult) {
-      return setFirstValue((state) =>
+    if (operator === null) {
+      saveToCurrentvalue(value);
+    } else if (memoryValue === display && operator !== null) {
+      setCurrentValue(value);
+    } else {
+      saveToCurrentvalue(value);
+    }
+  };
+
+  const handleDecimalInput = () => {
+    if (!hasDecimal(currentValue)) {
+      saveToCurrentvalue(".");
+    }
+  };
+
+  const handleMinusInput = () => {
+    if (currentValue === null) {
+      setCurrentValue("-");
+    } else if (currentValue === "-" || operator !== "-") {
+      handleOperatorInput("-");
+    } else {
+      return;
+    }
+  };
+
+  const saveToCurrentvalue = (value) => {
+    if (currentValue === null) {
+      return setCurrentValue(killLeadingZero(String(value)));
+    } else {
+      return setCurrentValue((state) =>
         killLeadingZero(String(state) + String(value))
       );
-    } else if (inputOperator && !hasPreviousResult) {
-      setSecondValue(firstValue);
-      setFirstValue(value);
-      setCalculatorState({ inputSecondValue: true });
-      return;
-    } else if (inputSecondValue) {
-      console.log("here are");
-      return setFirstValue(
-        (state) => String(state) + killLeadingZero(String(value))
-      );
-    } else if (inputOperator && hasPreviousResult) {
-      setFirstValue(value);
-      setCalculatorState({ inputSecondValue: true });
-      return;
-    } else if (inputFirstValue && hasPreviousResult) {
-      setCalculatorState({ inputFirstValue: true, hasPreviousResult: false });
-      setFirstValue(value);
-      return;
     }
   };
 
-  const handleDecimalInput = (value) => {
-    if (
-      (inputFirstValue && !hasDecimal(firstValue)) ||
-      (inputSecondValue && !hasDecimal(firstValue))
-    ) {
-      console.log("set decimal");
-      return setFirstValue(
-        (state) => killLeadingZero(String(state)) + String(value)
-      );
-    } else if (inputOperator) {
-      console.log("here");
-      //prepend zero
-      setInputValue(String(0) + String(value));
-      // store first value & switch state to accept second value
-      setSecondValue(firstValue);
-      setCalculatorState({ inputSecondValue: true });
-      return;
-    }
-  };
-
-  const handleReset = (style) => {
-    // different "styles" of reset gets passed as string
-    const isHardReset = style === "init";
-    const isEquals = style === "equals";
-    if (isHardReset) {
-      setFirstValue(0);
-      setSecondValue(0);
-      setOperator(null);
-      setCalculatorState({
-        inputFirstValue: true,
-        hasPreviousResult: false,
-      });
-    } else if (isEquals) {
-      setSecondValue(0);
-      setOperator(null);
-      setCalculatorState({
-        inputFirstValue: true,
-        hasPreviousResult: true,
-      });
-    } else {
-      setCalculatorState({
-        inputOperator: true,
-        hasPreviousResult: true,
-      });
-    }
+  const handleReset = () => {
+    setCurrentValue(null);
+    setMemoryValue(0);
+    setOperator(null);
+    setDisplay(0);
+    return;
   };
 
   const handleEquals = () => {
-    if (inputFirstValue) {
-      calculate(secondValue, firstValue, evaluateOperator("+"), setFirstValue);
-      handleReset("equals");
+    if (currentValue === "-" || operator === null) {
       return;
-    } else if (inputOperator) {
-      return;
-    } else if (inputSecondValue) {
-      calculate(
-        secondValue,
-        firstValue,
+    } else if (currentValue === null && display === 0) {
+      setDisplay(memoryValue);
+    } else {
+      return calculate(
+        memoryValue,
+        currentValue,
         evaluateOperator(operator),
-        setFirstValue
+        setMemoryValue
       );
-      handleReset("equals");
     }
   };
 
   const calculate = (a, b, operation, valueToSet) =>
     valueToSet(operation(a, b));
 
-  const display = () => {
-    if (inputFirstValue || inputSecondValue) {
-      return firstValue;
-    } else {
-      return operator;
-    }
-  };
-
   return (
     <div id="grid-container">
-      <div>First val: {firstValue}</div>
-      <div>operator is: {operator}</div>
-      <div>Second val: {secondValue}</div>
-      <div>IN val: {inputValue}</div>
-      <div> {inputFirstValue ? "true" : "false"}</div>
-      <div> {inputOperator ? "true" : "false"}</div>
-      <div> {inputSecondValue ? "true" : "false"}</div>
-      <div> {hasPreviousResult ? "true" : "false"}</div>
-
       <div id="display">
-        <Display content={display()} />
+        <Display content={display} />
       </div>
-      <div id="clear" onClick={() => handleReset("init")}>
+      <div id="clear" onClick={() => handleReset()}>
         <Button content="AC" />
       </div>
-      <div id="divide" onClick={() => handleUserInput("/")}>
+      <div id="divide" onClick={() => handleOperatorInput("/")}>
         <Button content="/" />
       </div>
-      <div id="multiply" onClick={() => handleUserInput("*")}>
+      <div id="multiply" onClick={() => handleOperatorInput("*")}>
         <Button content="*" />
       </div>
-      <div id="subtract" onClick={() => handleUserInput("-")}>
+      <div id="subtract" onClick={() => handleMinusInput()}>
         <Button content="-" />
       </div>
-      <div id="add" onClick={() => handleUserInput("+")}>
+      <div id="add" onClick={() => handleOperatorInput("+")}>
         <Button content="+" />
       </div>
       <div id="equals" onClick={() => handleEquals()}>
@@ -247,34 +125,34 @@ const Calculator = () => {
       <div id="decimal" onClick={() => handleDecimalInput(".")}>
         <Button content="." />
       </div>
-      <div id="zero" onClick={() => handleUserInput(0)}>
+      <div id="zero" onClick={() => handleNumberInput(0)}>
         <Button content="0" />
       </div>
-      <div id="one" onClick={() => handleUserInput(1)}>
+      <div id="one" onClick={() => handleNumberInput(1)}>
         <Button content="1" />
       </div>
-      <div id="two" onClick={() => handleUserInput(2)}>
+      <div id="two" onClick={() => handleNumberInput(2)}>
         <Button content="2" />
       </div>
-      <div id="three" onClick={() => handleUserInput(3)}>
+      <div id="three" onClick={() => handleNumberInput(3)}>
         <Button content="3" />
       </div>
-      <div id="four" onClick={() => handleUserInput(4)}>
+      <div id="four" onClick={() => handleNumberInput(4)}>
         <Button content="4" />
       </div>
-      <div id="five" onClick={() => handleUserInput(5)}>
+      <div id="five" onClick={() => handleNumberInput(5)}>
         <Button content="5" />
       </div>
-      <div id="six" onClick={() => handleUserInput(6)}>
+      <div id="six" onClick={() => handleNumberInput(6)}>
         <Button content="6" />
       </div>
-      <div id="seven" onClick={() => handleUserInput(7)}>
+      <div id="seven" onClick={() => handleNumberInput(7)}>
         <Button content="7" />
       </div>
-      <div id="eight" onClick={() => handleUserInput(8)}>
+      <div id="eight" onClick={() => handleNumberInput(8)}>
         <Button content="8" />
       </div>
-      <div id="nine" onClick={() => handleUserInput(9)}>
+      <div id="nine" onClick={() => handleNumberInput(9)}>
         <Button content="9" />
       </div>
     </div>
