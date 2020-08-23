@@ -1,7 +1,13 @@
 import { add, subtract, multiply, divide } from "./operations";
 
 export const killLeadingZero = (value) => {
-  return value - 0;
+  const isSingleZero = value === "0";
+  const isDoubleZero = value === "00";
+  if (isDoubleZero || isSingleZero) {
+    return "0";
+  } else {
+    return value.replace(/^0+/, "");
+  }
 };
 
 export const evaluateOperator = (value) => {
@@ -15,12 +21,6 @@ export const evaluateOperator = (value) => {
     return divide;
   }
 };
-
-export const isNegativeValue = (value) => String(value).charAt(0) === "-";
-
-export const inputLength = (value) => String(value).length;
-
-export const hasInput = (value) => value !== 0 || inputLength(value) > 1;
 
 export const hasDecimal = (value) => {
   return value % 1 !== 0;
