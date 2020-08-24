@@ -2,6 +2,7 @@ import React from "react";
 import { useFccTest, FccTests } from "@asteffey/react-fcc-test";
 import Calculator from "./components/Calculator";
 import styles from "./BaseStyles";
+import "./webfonts.css";
 
 const App = () => {
   useFccTest({
