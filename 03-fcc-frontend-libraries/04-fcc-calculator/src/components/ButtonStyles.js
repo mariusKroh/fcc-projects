@@ -19,6 +19,7 @@ const styles = createUseStyles({
     boxShadow: "2px 1px 1px 1px #344149",
     border: "1px solid #DDD",
     textShadow: textShadow,
+    boxSizing: "border-box",
   },
 });
 
