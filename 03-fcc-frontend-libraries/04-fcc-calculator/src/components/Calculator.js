@@ -56,6 +56,14 @@ const Calculator = () => {
     setDisplay(memoryValue);
   }, [memoryValue]);
 
+  useEffect(() => {
+    const maxLength = 12;
+    console.log(display.length);
+    if (display.length >= maxLength) {
+      setDisplay("MAX NUM");
+    }
+  }, [display.length]);
+
   const handleOperatorInput = (value) => {
     if (currentValue === display && operator !== null) {
       setOperator(value);
