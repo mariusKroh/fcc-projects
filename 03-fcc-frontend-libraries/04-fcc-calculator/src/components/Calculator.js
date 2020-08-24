@@ -6,6 +6,7 @@ import {
 } from "../utility/helpers";
 import Display from "./Display";
 import Button from "./Button";
+import { buttonColors } from "../utility/buttonColors";
 import styles from "./CalculatorStyles";
 
 const Calculator = () => {
@@ -31,13 +32,6 @@ const Calculator = () => {
     areaEight,
     areaNine,
   } = classes;
-
-  const buttonColors = {
-    pink: "#c62d80",
-    blue: "#4fd9d7",
-    darkGrey: "#344149",
-    lightGrey: "#868e90",
-  };
 
   const [currentValue, setCurrentValue] = useState(null);
   const [memoryValue, setMemoryValue] = useState(0);
