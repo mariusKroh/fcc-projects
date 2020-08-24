@@ -6,20 +6,7 @@ const App = () => {
   useFccTest({
     fccTest: FccTests.javascript_calculator,
   });
-  return (
-    <div
-      className="App"
-      style={{
-        width: "100vw",
-        height: "100vh",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Calculator />
-    </div>
-  );
+  return <Calculator />;
 };
 
 export default App;
