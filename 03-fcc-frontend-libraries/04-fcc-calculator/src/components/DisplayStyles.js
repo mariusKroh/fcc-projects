@@ -1,0 +1,18 @@
+import { createUseStyles } from "react-jss";
+
+const styles = createUseStyles({
+  root: {
+    height: "100%",
+    backgroundColor: "#a5dc4b",
+    borderRadius: "3px",
+    boxShadow: "inset 1px 0px 3px 3px #79a734",
+    fontSize: "3.5rem",
+    display: "flex",
+    alignItems: "center",
+    textShadow: "2px 1px #79a734",
+    padding: "0 10px",
+    color: "#344149",
+  },
+});
+
+export default styles;
