@@ -6,9 +6,39 @@ import {
 } from "../utility/helpers";
 import Display from "./Display";
 import Button from "./Button";
-import "./CalculatorStyles.css";
+import styles from "./CalculatorStyles";
 
 const Calculator = () => {
+  const classes = styles();
+  const {
+    root,
+    areaDisplay,
+    areaClear,
+    areaDivide,
+    areaMultiply,
+    areaSubtract,
+    areaAdd,
+    areaEquals,
+    areaDecimal,
+    areaZero,
+    areaOne,
+    areaTwo,
+    areaThree,
+    areaFour,
+    areaFive,
+    areaSix,
+    areaSeven,
+    areaEight,
+    areaNine,
+  } = classes;
+
+  const buttonColors = {
+    pink: "#c62d80",
+    blue: "#4fd9d7",
+    darkGrey: "#344149",
+    lightGrey: "#868e90",
+  };
+
   const [currentValue, setCurrentValue] = useState(null);
   const [memoryValue, setMemoryValue] = useState(0);
   const [display, setDisplay] = useState(0);
@@ -100,60 +130,92 @@ const Calculator = () => {
     valueToSet(operation(a, b));
 
   return (
-    <div id="grid-container">
-      <div id="display">
+    <div className={root} id="grid-container">
+      <div className={areaDisplay} id="display">
         <Display content={display} />
       </div>
-      <div id="clear" onClick={() => handleReset()}>
-        <Button content="AC" />
+      <div className={areaClear} id="clear" onClick={() => handleReset()}>
+        <Button content="AC" color={buttonColors.pink} />
       </div>
-      <div id="divide" onClick={() => handleOperatorInput("/")}>
-        <Button content="/" />
+      <div
+        className={areaDivide}
+        id="divide"
+        onClick={() => handleOperatorInput("/")}
+      >
+        <Button content="/" color={buttonColors.darkGrey} />
       </div>
-      <div id="multiply" onClick={() => handleOperatorInput("*")}>
-        <Button content="*" />
+      <div
+        className={areaMultiply}
+        id="multiply"
+        onClick={() => handleOperatorInput("*")}
+      >
+        <Button content="*" color={buttonColors.darkGrey} />
       </div>
-      <div id="subtract" onClick={() => handleMinusInput()}>
-        <Button content="-" />
+      <div
+        className={areaSubtract}
+        id="subtract"
+        onClick={() => handleMinusInput()}
+      >
+        <Button content="-" color={buttonColors.darkGrey} />
       </div>
-      <div id="add" onClick={() => handleOperatorInput("+")}>
-        <Button content="+" />
+      <div
+        className={areaAdd}
+        id="add"
+        onClick={() => handleOperatorInput("+")}
+      >
+        <Button content="+" color={buttonColors.darkGrey} />
       </div>
-      <div id="equals" onClick={() => handleEquals()}>
-        <Button content="=" />
+      <div className={areaEquals} id="equals" onClick={() => handleEquals()}>
+        <Button content="=" color={buttonColors.blue} />
       </div>
-      <div id="decimal" onClick={() => handleDecimalInput(".")}>
-        <Button content="." />
+      <div
+        className={areaDecimal}
+        id="decimal"
+        onClick={() => handleDecimalInput()}
+      >
+        <Button content="." color={buttonColors.darkGrey} />
       </div>
-      <div id="zero" onClick={() => handleNumberInput(0)}>
-        <Button content="0" />
+      <div className={areaZero} id="zero" onClick={() => handleNumberInput(0)}>
+        <Button content="0" color={buttonColors.lightGrey} />
       </div>
-      <div id="one" onClick={() => handleNumberInput(1)}>
-        <Button content="1" />
+      <div className={areaOne} id="one" onClick={() => handleNumberInput(1)}>
+        <Button content="1" color={buttonColors.lightGrey} />
       </div>
-      <div id="two" onClick={() => handleNumberInput(2)}>
-        <Button content="2" />
+      <div className={areaTwo} id="two" onClick={() => handleNumberInput(2)}>
+        <Button content="2" color={buttonColors.lightGrey} />
       </div>
-      <div id="three" onClick={() => handleNumberInput(3)}>
-        <Button content="3" />
+      <div
+        className={areaThree}
+        id="three"
+        onClick={() => handleNumberInput(3)}
+      >
+        <Button content="3" color={buttonColors.lightGrey} />
       </div>
-      <div id="four" onClick={() => handleNumberInput(4)}>
-        <Button content="4" />
+      <div className={areaFour} id="four" onClick={() => handleNumberInput(4)}>
+        <Button content="4" color={buttonColors.lightGrey} />
       </div>
-      <div id="five" onClick={() => handleNumberInput(5)}>
-        <Button content="5" />
+      <div className={areaFive} id="five" onClick={() => handleNumberInput(5)}>
+        <Button content="5" color={buttonColors.lightGrey} />
       </div>
-      <div id="six" onClick={() => handleNumberInput(6)}>
-        <Button content="6" />
+      <div className={areaSix} id="six" onClick={() => handleNumberInput(6)}>
+        <Button content="6" color={buttonColors.lightGrey} />
       </div>
-      <div id="seven" onClick={() => handleNumberInput(7)}>
-        <Button content="7" />
+      <div
+        className={areaSeven}
+        id="seven"
+        onClick={() => handleNumberInput(7)}
+      >
+        <Button content="7" color={buttonColors.lightGrey} />
       </div>
-      <div id="eight" onClick={() => handleNumberInput(8)}>
-        <Button content="8" />
+      <div
+        className={areaEight}
+        id="eight"
+        onClick={() => handleNumberInput(8)}
+      >
+        <Button content="8" color={buttonColors.lightGrey} />
       </div>
-      <div id="nine" onClick={() => handleNumberInput(9)}>
-        <Button content="9" />
+      <div className={areaNine} id="nine" onClick={() => handleNumberInput(9)}>
+        <Button content="9" color={buttonColors.lightGrey} />
       </div>
     </div>
   );

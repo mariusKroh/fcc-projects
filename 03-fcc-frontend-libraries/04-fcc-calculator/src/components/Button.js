@@ -1,17 +1,12 @@
 import React from "react";
-import "./ButtonStyles.css";
+import styles from "./ButtonStyles";
 
-const isOperator = (value) => {
-  return isNaN(value) || value === "." || value === "=";
-};
+const Button = ({ content, color }) => {
+  const classes = styles(color);
+  const { calculatorButton } = classes;
 
-const Button = ({ content }) => {
   return (
-    <div
-      className={`calculator-button ${
-        isOperator(content) ? "operator" : "number"
-      }`}
-    >
+    <div className={`calculator-button ${calculatorButton}`}>
       <div className="content">{content}</div>
     </div>
   );
