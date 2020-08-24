@@ -5,7 +5,7 @@ const styles = createUseStyles({
     display: "grid",
     gridTemplateColumns: "repeat(4, 100px)",
     gridTemplateRows: "repeat(6, 80px)",
-    gap: "0.5rem",
+    gap: "0.75rem",
     gridTemplateAreas:
       " 'display display display display''clear clear divide multiply''seven eight nine subtract''four five six add''one two three equals''zero zero decimal equals'",
     backgroundColor: "#d0d8e0",

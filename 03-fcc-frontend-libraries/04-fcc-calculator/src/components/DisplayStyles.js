@@ -13,6 +13,7 @@ const styles = createUseStyles({
     textShadow: "2px 1px #79a734",
     padding: "0 10px",
     color: "#344149",
+    border: "1px solid #EEE",
   },
 });
 
